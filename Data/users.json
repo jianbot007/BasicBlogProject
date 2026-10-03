@@ -1,0 +1,9 @@
+[
+  {
+    "Id": 1,
+    "Name": "Admin User",
+    "Email": "admin@simpleblog.com",
+    "PasswordHash": "$2a$11$N9qo8uLOickgx2ZMRZoMyeIjZAgcg7b3XeKeUxWdeS86E36P4/LYm",
+    "CreatedAt": "2024-01-01T00:00:00Z"
+  }
+]

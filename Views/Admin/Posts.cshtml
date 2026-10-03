@@ -1,0 +1,70 @@
+@model IEnumerable<SimpleBlog.Models.Entities.BlogPost>
+
+@{
+    ViewData["Title"] = "Manage Posts";
+}
+
+<div class="row mb-4">
+    <div class="col-md-8">
+        <h1>Manage Posts</h1>
+    </div>
+    <div class="col-md-4 text-end">
+        <a href="@Url.Action("CreatePost", "Admin")" class="btn btn-success">+ New Post</a>
+        <a href="@Url.Action("Dashboard", "Admin")" class="btn btn-secondary">Back to Dashboard</a>
+    </div>
+</div>
+
+@if (Model != null && Model.Any())
+{
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>Title</th>
+                    <th>Category</th>
+                    <th>Created</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var post in Model)
+                {
+                    <tr>
+                        <td>
+                            <strong>@post.Title</strong><br />
+                            <small class="text-muted">/@post.Slug</small>
+                        </td>
+                        <td>
+                            @if (post.Category != null)
+                            {
+                                <span class="badge bg-secondary">@post.Category.Name</span>
+                            }
+                        </td>
+                        <td>@post.CreatedAt.ToString("MMM dd, yyyy")</td>
+                        <td>
+                            @if (post.IsPublished)
+                            {
+                                <span class="badge bg-success">Published</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-warning">Draft</span>
+                            }
+                        </td>
+                        <td>
+                            <a href="@Url.Action("EditPost", "Admin", new { id = post.Id })" class="btn btn-sm btn-info">Edit</a>
+                            <form method="post" action="@Url.Action("DeletePost", "Admin", new { id = post.Id })" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this post?');">
+                                <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <p class="alert alert-info">No posts yet. <a href="@Url.Action("CreatePost", "Admin")">Create your first post</a></p>
+}

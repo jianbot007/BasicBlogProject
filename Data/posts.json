@@ -1,0 +1,62 @@
+[
+  {
+    "Id": 1,
+    "Title": "Getting Started with ASP.NET Core",
+    "Slug": "getting-started-with-aspnet-core",
+    "Content": "<p>ASP.NET Core is a modern, cross-platform framework for building web applications. In this post, we'll explore the basics of ASP.NET Core and how to create your first application.</p><p>ASP.NET Core provides a powerful foundation for building scalable web applications with built-in dependency injection, logging, and middleware support.</p>",
+    "ShortDescription": "Learn the fundamentals of ASP.NET Core and start building modern web applications.",
+    "FeaturedImage": "https://via.placeholder.com/800x400?text=ASP.NET+Core",
+    "CreatedAt": "2024-01-15T10:00:00Z",
+    "UpdatedAt": null,
+    "IsPublished": true,
+    "CategoryId": 1
+  },
+  {
+    "Id": 2,
+    "Title": "Understanding Dependency Injection",
+    "Slug": "understanding-dependency-injection",
+    "Content": "<p>Dependency Injection is a fundamental design pattern that helps write maintainable and testable code. This article explores how dependency injection works and why you should use it in your applications.</p>",
+    "ShortDescription": "Master the art of dependency injection for cleaner, more testable code.",
+    "FeaturedImage": "https://via.placeholder.com/800x400?text=Dependency+Injection",
+    "CreatedAt": "2024-01-10T14:30:00Z",
+    "UpdatedAt": null,
+    "IsPublished": true,
+    "CategoryId": 1
+  },
+  {
+    "Id": 3,
+    "Title": "My Journey to Entrepreneurship",
+    "Slug": "my-journey-to-entrepreneurship",
+    "Content": "<p>Starting my own business was one of the most challenging yet rewarding experiences of my life. In this post, I share my insights and lessons learned along the way.</p>",
+    "ShortDescription": "A personal account of starting a business and the lessons I learned.",
+    "FeaturedImage": "https://via.placeholder.com/800x400?text=Entrepreneurship",
+    "CreatedAt": "2024-01-05T09:15:00Z",
+    "UpdatedAt": null,
+    "IsPublished": true,
+    "CategoryId": 3
+  },
+  {
+    "Id": 4,
+    "Title": "Work-Life Balance Tips",
+    "Slug": "work-life-balance-tips",
+    "Content": "<p>Maintaining a healthy work-life balance is crucial for long-term success and happiness. Here are some practical tips to help you achieve better balance in your life.</p>",
+    "ShortDescription": "Practical strategies for achieving and maintaining work-life balance.",
+    "FeaturedImage": "https://via.placeholder.com/800x400?text=Work+Life+Balance",
+    "CreatedAt": "2024-01-01T11:00:00Z",
+    "UpdatedAt": null,
+    "IsPublished": true,
+    "CategoryId": 2
+  },
+  {
+    "Id": 5,
+    "Title": "Draft: Advanced ASP.NET Core Patterns",
+    "Slug": "draft-advanced-aspnet-core-patterns",
+    "Content": "<p>This is a draft article about advanced patterns in ASP.NET Core development.</p>",
+    "ShortDescription": "Advanced architectural patterns for enterprise ASP.NET Core applications.",
+    "FeaturedImage": null,
+    "CreatedAt": "2024-01-20T08:00:00Z",
+    "UpdatedAt": null,
+    "IsPublished": false,
+    "CategoryId": 1
+  }
+]

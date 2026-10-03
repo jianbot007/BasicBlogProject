@@ -1,0 +1,78 @@
+﻿@model IEnumerable<SimpleBlog.Models.Entities.BlogPost>
+@using SimpleBlog.Models.Entities
+
+@{
+    ViewData["Title"] = "Blog Posts";
+}
+
+<div class="row">
+    <div class="col-md-8">
+        <h1 class="mb-4">All Blog Posts</h1>
+
+        @if (Model != null )
+        {
+            @foreach (var post in Model)
+            {
+                <div class="card mb-4">
+                    @if (!string.IsNullOrEmpty(post.FeaturedImage))
+                    {
+                        <img src="@post.FeaturedImage" class="card-img-top" alt="@post.Title" style="height: 250px; object-fit: cover;">
+                    }
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <a href="@Url.Action("Post", "Blog", new { slug = post.Slug })" class="text-decoration-none">
+                                @post.Title
+                            </a>
+                        </h5>
+                        <p class="card-text">@post.ShortDescription</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <small class="text-muted">
+                                @if (post.Category != null)
+                                {
+                                    <span class="badge bg-info">
+                                        <a href="@Url.Action("Category", "Blog", new { slug = post.Category.Slug })" class="text-white text-decoration-none">
+                                            @post.Category.Name
+                                        </a>
+                                    </span>
+                                }
+                                <span> • @post.CreatedAt.ToString("MMM dd, yyyy")</span>
+                            </small>
+                            <a href="@Url.Action("Post", "Blog", new { slug = post.Slug })" class="btn btn-sm btn-primary">Read More</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <p class="alert alert-info">No posts available yet.</p>
+        }
+    </div>
+
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5>Categories</h5>
+            </div>
+            <div class="card-body">
+                @if (ViewBag.Categories != null && ((IEnumerable<Category>)ViewBag.Categories).Any())
+                {
+                    <ul class="list-group list-group-flush">
+                        @foreach (var category in (IEnumerable<Category>)ViewBag.Categories)
+                        {
+                            <li class="list-group-item">
+                                <a href="@Url.Action("Category", "Blog", new { slug = category.Slug })" class="text-decoration-none">
+                                    @category.Name
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                }
+                else
+                {
+                    <p class="text-muted">No categories available.</p>
+                }
+            </div>
+        </div>
+    </div>
+</div>

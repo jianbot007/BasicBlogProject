@@ -1,0 +1,20 @@
+[
+  {
+    "Id": 1,
+    "Name": "Technology",
+    "Slug": "technology",
+    "Description": "Articles about technology and programming"
+  },
+  {
+    "Id": 2,
+    "Name": "Lifestyle",
+    "Slug": "lifestyle",
+    "Description": "Personal thoughts and lifestyle tips"
+  },
+  {
+    "Id": 3,
+    "Name": "Business",
+    "Slug": "business",
+    "Description": "Business insights and entrepreneurship"
+  }
+]

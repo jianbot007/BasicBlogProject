@@ -1,0 +1,77 @@
+﻿@model SimpleBlog.Models.Entities.BlogPost
+@using SimpleBlog.Models.Entities
+
+@{
+    ViewData["Title"] = Model?.Title ?? "Blog Post";
+}
+
+@if (Model != null)
+{
+    <div class="row">
+        <div class="col-md-8">
+            @if (!string.IsNullOrEmpty(Model.FeaturedImage))
+            {
+                <img src="@Model.FeaturedImage" class="img-fluid mb-4" alt="@Model.Title" style="max-height: 400px; width: 100%; object-fit: cover;">
+            }
+
+            <h1>@Model.Title</h1>
+
+            <div class="text-muted mb-4">
+                @if (Model.Category != null)
+                {
+                    <span class="badge bg-info">
+                        <a href="@Url.Action("Category", "Blog", new { slug = Model.Category.Slug })" class="text-white text-decoration-none">
+                            @Model.Category.Name
+                        </a>
+                    </span>
+                }
+                <span> • Published @Model.CreatedAt.ToString("MMM dd, yyyy")</span>
+                @if (Model.UpdatedAt.HasValue)
+                {
+                    <span> (Updated @Model.UpdatedAt.Value.ToString("MMM dd, yyyy"))</span>
+                }
+            </div>
+
+            <div class="post-content">
+                @Html.Raw(Model.Content)
+            </div>
+
+            <hr class="my-4" />
+
+            <div class="mt-4">
+                <a href="@Url.Action("Index", "Blog")" class="btn btn-secondary">Back to Posts</a>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5>Categories</h5>
+                </div>
+                <div class="card-body">
+                    @if (ViewBag.Categories != null && ((IEnumerable<Category>)ViewBag.Categories).Any())
+                    {
+                        <ul class="list-group list-group-flush">
+                            @foreach (var category in (IEnumerable<Category>)ViewBag.Categories)
+                            {
+                                <li class="list-group-item">
+                                    <a href="@Url.Action("Category", "Blog", new { slug = category.Slug })" class="text-decoration-none">
+                                        @category.Name
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        <p class="text-muted">No categories available.</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <p class="alert alert-danger">Post not found.</p>
+}

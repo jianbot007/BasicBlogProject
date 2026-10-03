@@ -1,0 +1,70 @@
+@model SimpleBlog.Models.ViewModels.BlogPostCreateViewModel
+
+@{
+    ViewData["Title"] = "Create New Post";
+}
+
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <h1 class="mb-4">Create New Post</h1>
+
+        <form method="post" class="needs-validation">
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+            <div class="mb-3">
+                <label asp-for="Title" class="form-label"></label>
+                <input asp-for="Title" class="form-control" placeholder="Enter post title" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="ShortDescription" class="form-label"></label>
+                <textarea asp-for="ShortDescription" class="form-control" rows="3" placeholder="Brief summary of the post"></textarea>
+                <span asp-validation-for="ShortDescription" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Content" class="form-label"></label>
+                <textarea asp-for="Content" class="form-control" rows="8" placeholder="Full post content (you can use HTML)"></textarea>
+                <span asp-validation-for="Content" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="FeaturedImage" class="form-label"></label>
+                <input asp-for="FeaturedImage" class="form-control" placeholder="https://example.com/image.jpg" />
+                <small class="form-text text-muted">URL to featured image</small>
+                <span asp-validation-for="FeaturedImage" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="CategoryId" class="form-label"></label>
+                <select asp-for="CategoryId" class="form-select">
+                    <option value="">-- Select Category --</option>
+                    @if (ViewBag.Categories != null)
+                    {
+                        @foreach (var category in ViewBag.Categories)
+                        {
+                            <option value="@category.Id">@category.Name</option>
+                        }
+                    }
+                </select>
+                <span asp-validation-for="CategoryId" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3 form-check">
+                <input type="checkbox" class="form-check-input" asp-for="IsPublished">
+                <label class="form-check-label" asp-for="IsPublished"></label>
+                <small class="d-block mt-1 text-muted">Check this to publish immediately, or save as draft</small>
+            </div>
+
+            <div class="d-grid gap-2 d-sm-flex">
+                <button type="submit" class="btn btn-primary">Create Post</button>
+                <a href="@Url.Action("Posts", "Admin")" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
