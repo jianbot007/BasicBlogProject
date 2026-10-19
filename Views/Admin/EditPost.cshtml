@@ -8,8 +8,9 @@
     <div class="col-md-8 offset-md-2">
         <h1 class="mb-4">Edit Post</h1>
 
-        <form method="post" class="needs-validation">
+        <form method="post" enctype="multipart/form-data" class="needs-validation">
             <input asp-for="Id" type="hidden" />
+            <input asp-for="FeaturedImage" type="hidden" />
             <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
 
             <div class="mb-3">
@@ -31,9 +32,17 @@
             </div>
 
             <div class="mb-3">
-                <label asp-for="FeaturedImage" class="form-label"></label>
-                <input asp-for="FeaturedImage" class="form-control" />
-                <span asp-validation-for="FeaturedImage" class="text-danger"></span>
+                <label asp-for="FeaturedImageFile" class="form-label">Featured Image</label>
+                @if (!string.IsNullOrEmpty(Model.FeaturedImage))
+                {
+                    <div class="mb-2">
+                        <img src="@Model.FeaturedImage" alt="Current featured image" class="img-thumbnail" style="max-height: 150px; display: block;" />
+                        <small class="text-muted">Current image: <a href="@Model.FeaturedImage" target="_blank">View</a></small>
+                    </div>
+                }
+                <input asp-for="FeaturedImageFile" type="file" class="form-control" accept=".jpg,.jpeg,.png,.webp" />
+                <small class="form-text text-muted">Leave empty to keep the current image, or select a new file to replace it (.jpg, .jpeg, .png, .webp, max 5 MB)</small>
+                <span asp-validation-for="FeaturedImageFile" class="text-danger"></span>
             </div>
 
             <div class="mb-3">

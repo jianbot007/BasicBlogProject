@@ -8,7 +8,7 @@
     <div class="col-md-8 offset-md-2">
         <h1 class="mb-4">Create New Post</h1>
 
-        <form method="post" class="needs-validation">
+        <form method="post" enctype="multipart/form-data" class="needs-validation">
             <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
 
             <div class="mb-3">
@@ -30,10 +30,10 @@
             </div>
 
             <div class="mb-3">
-                <label asp-for="FeaturedImage" class="form-label"></label>
-                <input asp-for="FeaturedImage" class="form-control" placeholder="https://example.com/image.jpg" />
-                <small class="form-text text-muted">URL to featured image</small>
-                <span asp-validation-for="FeaturedImage" class="text-danger"></span>
+                <label asp-for="FeaturedImageFile" class="form-label"></label>
+                <input asp-for="FeaturedImageFile" type="file" class="form-control" accept=".jpg,.jpeg,.png,.webp" />
+                <small class="form-text text-muted">Select an image file (.jpg, .jpeg, .png, .webp, max 5 MB)</small>
+                <span asp-validation-for="FeaturedImageFile" class="text-danger"></span>
             </div>
 
             <div class="mb-3">

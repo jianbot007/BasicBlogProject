@@ -16,6 +16,11 @@ namespace SimpleBlog.Controllers
         private readonly CategoryService _categoryService;
         private readonly IUserRepository _userRepository;
         private readonly IBlogPostRepository _postRepository;
+        private readonly IBlobStorageService _blobStorageService;
+        private readonly ILogger<AdminController> _logger;
+
+        private static readonly string[] AllowedExtensions = { ".jpg", ".jpeg", ".png", ".webp" };
+        private const long MaxFileSizeInBytes = 5 * 1024 * 1024; // 5 MB
 
         private const string AdminSessionKey = "AdminUserId";
 
@@ -23,12 +28,16 @@ namespace SimpleBlog.Controllers
             BlogService blogService,
             CategoryService categoryService,
             IUserRepository userRepository,
-            IBlogPostRepository postRepository)
+            IBlogPostRepository postRepository,
+            IBlobStorageService blobStorageService,
+            ILogger<AdminController> logger)
         {
             _blogService = blogService;
             _categoryService = categoryService;
             _userRepository = userRepository;
             _postRepository = postRepository;
+            _blobStorageService = blobStorageService;
+            _logger = logger;
         }
 
         // GET: /admin/login
@@ -121,8 +130,33 @@ namespace SimpleBlog.Controllers
             if (!IsAdminLoggedIn())
                 return RedirectToAction("Login");
 
+            // Validate that an image file is provided
+            if (model.FeaturedImageFile == null || model.FeaturedImageFile.Length == 0)
+            {
+                ModelState.AddModelError(nameof(model.FeaturedImageFile), "Please select a featured image file.");
+            }
+            else if (!ValidateImageFile(model.FeaturedImageFile, out var validationError))
+            {
+                ModelState.AddModelError(nameof(model.FeaturedImageFile), validationError!);
+            }
+
             if (!ModelState.IsValid)
             {
+                var categories = await _categoryService.GetAllCategoriesAsync();
+                ViewBag.Categories = categories;
+                return View(model);
+            }
+
+            // Upload image to Azure Blob Storage
+            try
+            {
+                var imageUrl = await _blobStorageService.UploadImageAsync(model.FeaturedImageFile!);
+                model.FeaturedImage = imageUrl;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to upload image to Azure Blob Storage during post creation.");
+                ModelState.AddModelError(nameof(model.FeaturedImageFile), $"Storage upload failed: {ex.Message}");
                 var categories = await _categoryService.GetAllCategoriesAsync();
                 ViewBag.Categories = categories;
                 return View(model);
@@ -169,11 +203,38 @@ namespace SimpleBlog.Controllers
             if (id != model.Id)
                 return BadRequest();
 
+            // If a replacement image file was uploaded, validate it
+            if (model.FeaturedImageFile != null && model.FeaturedImageFile.Length > 0)
+            {
+                if (!ValidateImageFile(model.FeaturedImageFile, out var validationError))
+                {
+                    ModelState.AddModelError(nameof(model.FeaturedImageFile), validationError!);
+                }
+            }
+
             if (!ModelState.IsValid)
             {
                 var categories = await _categoryService.GetAllCategoriesAsync();
                 ViewBag.Categories = categories;
                 return View(model);
+            }
+
+            // If a new image was uploaded, upload to Azure Blob Storage to replace current image URL
+            if (model.FeaturedImageFile != null && model.FeaturedImageFile.Length > 0)
+            {
+                try
+                {
+                    var imageUrl = await _blobStorageService.UploadImageAsync(model.FeaturedImageFile);
+                    model.FeaturedImage = imageUrl;
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Failed to upload replacement image to Azure Blob Storage for post {PostId}.", id);
+                    ModelState.AddModelError(nameof(model.FeaturedImageFile), $"Storage upload failed: {ex.Message}");
+                    var categories = await _categoryService.GetAllCategoriesAsync();
+                    ViewBag.Categories = categories;
+                    return View(model);
+                }
             }
 
             try
@@ -185,6 +246,32 @@ namespace SimpleBlog.Controllers
             {
                 return NotFound();
             }
+        }
+
+        private static bool ValidateImageFile(IFormFile file, out string? errorMessage)
+        {
+            errorMessage = null;
+
+            if (file == null || file.Length == 0)
+            {
+                errorMessage = "Please select an image file.";
+                return false;
+            }
+
+            if (file.Length > MaxFileSizeInBytes)
+            {
+                errorMessage = "Image size cannot exceed 5 MB.";
+                return false;
+            }
+
+            var extension = Path.GetExtension(file.FileName).ToLowerInvariant();
+            if (!AllowedExtensions.Contains(extension))
+            {
+                errorMessage = "Only .jpg, .jpeg, .png, and .webp image files are allowed.";
+                return false;
+            }
+
+            return true;
         }
 
         // POST: /admin/posts/delete/5

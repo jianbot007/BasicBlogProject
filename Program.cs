@@ -48,6 +48,7 @@ builder.Services.AddScoped<IUserRepository, EfUserRepository>();
 // Register services
 builder.Services.AddScoped<BlogService>();
 builder.Services.AddScoped<CategoryService>();
+builder.Services.AddScoped<IBlobStorageService, BlobStorageService>();
 
 // Add session for admin authentication
 builder.Services.AddSession(options =>

@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Http;
 
 namespace SimpleBlog.Models.ViewModels
 {
@@ -14,6 +15,9 @@ namespace SimpleBlog.Models.ViewModels
 
         [Required(ErrorMessage = "Content is required")]
         public string Content { get; set; } = string.Empty;
+
+        [Display(Name = "Featured Image")]
+        public IFormFile? FeaturedImageFile { get; set; }
 
         [StringLength(500, ErrorMessage = "Featured image URL cannot exceed 500 characters")]
         public string? FeaturedImage { get; set; }
